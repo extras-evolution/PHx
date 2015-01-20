@@ -5,7 +5,7 @@
  * (Placeholders Xtended) Adds the capability of output modifiers when using placeholders, template variables and settings tags
  *
  * @category    plugin
- * @version     2.2.0
+ * @version     2.2.1
  * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @author      Armand "bS" Pondman (apondman@zerobarrier.nl)
  * @internal    @properties &phxdebug=Log events;int;0 &phxmaxpass=Max. Passes;int;50
