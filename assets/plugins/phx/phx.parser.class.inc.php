@@ -2,7 +2,7 @@
 /*####
 #
 #	Name: PHx (Placeholders Xtended)
-#	Version: 2.2.1
+#	Version: 2.2.2
 #	Modified by Nick to include external files
 #	Modified by Anton Kuzmin for using of modx snippets cache
 #	Modified by Temus (temus3@gmail.com)
@@ -18,7 +18,7 @@ class PHxParser {
 	function PHxParser($debug=0,$maxpass=50) {
 		global $modx;
 		$this->name = "PHx";
-		$this->version = "2.2.1";
+		$this->version = "2.2.2";
 		$this->user["mgrid"] = intval(isset($_SESSION['mgrInternalKey']) ? $_SESSION['mgrInternalKey'] : 0);
 		$this->user["usrid"] = intval(isset($_SESSION['webInternalKey']) ? $_SESSION['webInternalKey'] : 0);
 		$this->user["id"] = ($this->user["usrid"] > 0 ) ? (-$this->user["usrid"]) : $this->user["mgrid"];
@@ -220,8 +220,8 @@ class PHxParser {
 					#####  Conditional Modifiers 
 					case "input": case "if": $output = $modifier_value[$i]; break;
 					case "equals": case "is": case "eq": $condition[] = intval(($output==$modifier_value[$i])); break;
-          case "in": case "isin": $condition[] = intval(in_array($output, explode(',', $modifier_value[$i]))); break;
-          case "contains": $condition[] = intval(false !== strpos($output, $modifier_value[$i])); break;
+					case "in": case "isin": $condition[] = intval(in_array($output, explode(',', $modifier_value[$i]))); break;
+					case "contains": $condition[] = intval(false !== strpos($output, $modifier_value[$i])); break;
 					case "notequals": case "isnot": case "isnt": case "ne":$condition[] = intval(($output!=$modifier_value[$i]));break;
 					case "isgreaterthan": case "isgt": case "eg": $condition[] = intval(($output>=$modifier_value[$i]));break;
 					case "islowerthan": case "islt": case "el": $condition[] = intval(($output<=$modifier_value[$i]));break;
@@ -268,8 +268,8 @@ class PHxParser {
 					case "ucwords": $output = $this->ucwords($output); break;
 					case "htmlent": case "htmlentities": $output = htmlentities($output,ENT_QUOTES,$modx->config['modx_charset']); break;
 					case "html_entity_decode": $output = html_entity_decode($output,ENT_QUOTES,$modx->config['modx_charset']); break;
-          case "htmlquot": case "htmlspec": $output = htmlspecialchars($output,ENT_COMPAT,$modx->config['modx_charset'],false); break;
-          case "jsonenc": case "jsonencode": $output = json_encode($output); break;
+					case "htmlquot": case "htmlspec": $output = htmlspecialchars($output,ENT_COMPAT,$modx->config['modx_charset'],false); break;
+					case "jsonenc": case "jsonencode": $output = json_encode($output); break;
 					case "esc":
 						$output = preg_replace("/&amp;(#[0-9]+|[a-z]+);/i", "&$1;", htmlspecialchars($output));
   						$output = str_replace(array("[","]","`"),array("&#91;","&#93;","&#96;"),$output);
@@ -303,10 +303,10 @@ class PHxParser {
 						$filter = str_replace("?",$output,$filter);
 						$output = eval("return ".$filter.";");
 						break;
-          case "isempty": case "ifempty": if (empty($output)) $output = $modifier_value[$i]; break;
-          case "isntempty": case "notempty": if (trim($output) != '') $output = $modifier_value[$i]; break;
+					case "isempty": case "ifempty": if (empty($output)) $output = $modifier_value[$i]; break;
+					case "isntempty": case "notempty": if (trim($output) != '') $output = $modifier_value[$i]; break;
 					case "date": $output = strftime($modifier_value[$i],0+$output); break;
-          case "strtotime": $output = strtotime($output); break;
+					case "strtotime": $output = strtotime($output); break;
 					case "set":
 						$c = $i+1;
 						if ($count>$c&&$modifier_cmd[$c]=="value") $output = preg_replace("~([^a-zA-Z0-9])~","",$modifier_value[$i]);
@@ -407,7 +407,7 @@ class PHxParser {
 	// Returns the specified field from the user record
 	// positive userid = manager, negative integer = webuser
 	function ModUser($userid,$field) {
-	 global $modx;
+		global $modx;
 		if (!array_key_exists($userid, $this->cache["ui"])) {
 			if (intval($userid) < 0) {
 				$user = $modx->getWebUserInfo(-($userid));
@@ -423,7 +423,7 @@ class PHxParser {
 	 
 	// Returns true if the user id is in one the specified webgroups
 	function isMemberOfWebGroupByUserId($userid=0,$groupNames=array()) {
-	 global $modx;
+		global $modx;
 		// if $groupNames is not an array return false
 		if(!is_array($groupNames)) return false;
 		// if the user id is a negative number make it positive
@@ -446,7 +446,7 @@ class PHxParser {
 	 
 	// Returns the value of a PHx/MODx placeholder.
 	function getPHxVariable($name) {
-	 global $modx;
+		global $modx;
 		// Check if this variable is created by PHx 
 		if (array_key_exists($name, $this->placeholders)) {
 			// Return the value from PHx
@@ -464,7 +464,7 @@ class PHxParser {
 	
 	//mbstring
 	function substr($str, $s, $l = null) {
-   global $modx;
+		global $modx;
 		if (function_exists('mb_substr')) return mb_substr($str, $s, $l, $modx->config['modx_charset']);
 		return substr($str, $s, $l);
 	}
@@ -509,9 +509,9 @@ class PHxParser {
 	}
 	
 	// Merges placeholder variables with
-    function mergePHxVars($arPhs) {
-      foreach ($arPhs as $phkey=>$phval) {
-        $this->setPHxVariable($phkey, $phval);
-      }
-    }
+	function mergePHxVars($arPhs) {
+		foreach ($arPhs as $phkey=>$phval) {
+			$this->setPHxVariable($phkey, $phval);
+		}
+	}
 }
